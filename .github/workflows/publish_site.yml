@@ -35,7 +35,7 @@ jobs:
 
       - name: Install Python Dependencies
         run: |
-          pip install .[recommended,git,imaging]
+          pip install -r requirements.txt
 
       - name: Build documentation
         env:
