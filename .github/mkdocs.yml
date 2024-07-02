@@ -1,0 +1,21 @@
+site_name: Kubeform.io Documentation
+site_description: Documentation and resources for using the Kubeform modules.
+site_author: Kubeform.io Team
+copyright: Copyright &copy; 2023 to Present, Kubeform.io
+use_directory_urls: false
+docs_dir: ../
+site_dir: !ENV SITE_DIRECTORY
+repo_name: kubeform-io.gitlab.io
+repo_url: https://github.com/kubeform-io/kubeform-io.gitlab.io
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/kubeform-io
+theme:
+  name: material
+  features:
+    - content.action.edit  
+plugins: {}
+#  - git-committers:
+#      repository: kubeform-io/kubeform-io.gitlab.io
+#      branch: main

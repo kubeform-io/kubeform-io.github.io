@@ -1,0 +1,59 @@
+name: Publish Site
+on:
+  push:
+    branches:
+      - main
+env:
+  PYTHON_VERSION: 3.x
+permissions:
+  contents: write
+  id-token: write
+  pages: write
+jobs:
+  website:
+    name: Build Website
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+
+      - name: Set up Build Cache
+        uses: actions/cache/restore@v4
+        with:
+          key: kubeform-io-${{ hashfiles('.cache/**') }}
+          path: .cache
+          restore-keys: |
+            kubeform-io-
+
+      - name: Install Python Dependencies
+        run: |
+          pip install .[recommended,git,imaging]
+
+      - name: Build documentation
+        env:
+          SITE_DIRECTORY: ${{ runner.temp }}/site
+        run: |
+          mkdocs build --clean --config-file=./.github/mkdocs.yml
+          mkdocs --version
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/site
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+
+      - name: Save Build Cache
+        uses: actions/cache/save@v4
+        with:
+          key: kubeform-io-${{ hashfiles('.cache/**') }}
+          path: .cache
